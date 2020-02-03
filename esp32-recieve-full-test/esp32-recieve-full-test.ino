@@ -11,7 +11,7 @@ FASTLED_USING_NAMESPACE
 #define NUM_LEDS    90
 CRGB leds[NUM_LEDS];
 
-#define BRIGHTNESS 10 // 25/255 = 1/10th brightness
+#define BRIGHTNESS 100 // 25/255 = 1/10th brightness
 #define FRAMES_PER_SECOND 120
 #define CHANGE_PATTERN_SECONDS 10 // automatically change to the next pattern after this many seconds
 
@@ -19,7 +19,7 @@ CRGB leds[NUM_LEDS];
 
 RCSwitch mySwitch = RCSwitch();
 
-#define KEEP_SHOWING_FOR_MILLIS 2000
+#define KEEP_SHOWING_FOR_MILLIS 10000
 long lastHeartbeat = millis();
 
 // setup function. runs once, then loop() runs forever
@@ -39,7 +39,7 @@ void setup() {
 
 // List of patterns to cycle through.  Each is defined as a separate function below.
 typedef void (*SimplePatternList[])();
-SimplePatternList gPatterns = { rainbow};
+SimplePatternList gPatterns = { portal };
 
 uint8_t gCurrentPatternNumber = 0; // Index number of which pattern is current
 uint32_t lastPatternChange = millis(); // keep track of the last time we changed patterns
@@ -89,6 +89,14 @@ void nextPattern() {
 // ====================
 // animation functions
 // ====================
+
+void portal() {
+  // 16 colored dots, weaving in and out of sync with each other
+  fadeToBlackBy( leds, NUM_LEDS, 8); // 8/256 = dim by 1/32 each frame
+  for( int i = 0; i < 16; i++) {
+    leds[beatsin16( 7, 0, NUM_LEDS-1, 0, i*5760)] |= CHSV(gHue, 200, 255);
+  }
+}
 
 void rainbow() {
   // FastLED's built-in rainbow generator
