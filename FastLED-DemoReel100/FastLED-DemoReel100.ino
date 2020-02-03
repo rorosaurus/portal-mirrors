@@ -4,13 +4,13 @@
 
 FASTLED_USING_NAMESPACE
 
-#define DATA_PIN    5 // this is the pin that is connected to data in on the first neopixel ring (pin 5 maps to "D1" labelled on our board)
+#define DATA_PIN    1 // this is the pin that is connected to data in on the first neopixel ring (pin 5 maps to "D1" labelled on our board)
 #define LED_TYPE    WS2812B
 #define COLOR_ORDER RGB
-#define NUM_LEDS    180
+#define NUM_LEDS    90
 CRGB leds[NUM_LEDS];
 
-#define BRIGHTNESS 10 // 25/255 = 1/10th brightness
+#define BRIGHTNESS 100 // 25/255 = 1/10th brightness
 #define FRAMES_PER_SECOND 120
 #define CHANGE_PATTERN_SECONDS 10 // automatically change to the next pattern after this many seconds
 
@@ -29,7 +29,7 @@ void setup() {
 
 // List of patterns to cycle through.  Each is defined as a separate function below.
 typedef void (*SimplePatternList[])();
-SimplePatternList gPatterns = { confetti };
+SimplePatternList gPatterns = { rainbow, sinelon, confetti };
 
 uint8_t gCurrentPatternNumber = 0; // Index number of which pattern is current
 uint32_t lastPatternChange = millis(); // keep track of the last time we changed patterns
@@ -47,7 +47,7 @@ void loop() {
   FastLED.delay(1000/FRAMES_PER_SECOND); 
 
   // do some periodic updates
-  EVERY_N_MILLISECONDS(200) { fill_solid( leds, NUM_LEDS, CHSV( gHue, 200, 255)); } // make sure we don't get too far from blue
+  //EVERY_N_MILLISECONDS(200) { fill_solid( leds, NUM_LEDS, CHSV( gHue, 200, 255)); } // make sure we don't get too far from blue
   EVERY_N_SECONDS(CHANGE_PATTERN_SECONDS) { patternTimer(); } // change patterns periodically
 }
 
@@ -87,7 +87,10 @@ void addGlitter(fract8 chanceOfGlitter) {
 void confetti() {
   
   // random colored speckles that blink in and fade smoothly
-  fadeToBlackBy( leds, NUM_LEDS, 0.1);
+  fadeToBlackBy( leds, NUM_LEDS, 25);
+//  for (int i=0; i < NUM_LEDS; i++){
+//    leds[i] -= CHSV( gHue , 200, 255);
+//  }
   int pos = random16(NUM_LEDS);
   leds[pos] += CHSV( gHue + random8(32), 200, 255);
 }
