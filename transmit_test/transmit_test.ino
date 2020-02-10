@@ -9,6 +9,7 @@
 #define ledPin 1
 
 bool oldButtonState = LOW;
+int nextSignal = 0;
 
 #include <RCSwitch.h>
 
@@ -39,7 +40,12 @@ void loop() {
   bool buttonState = digitalRead(buttonPin);
 
   if (buttonState == LOW && oldButtonState == HIGH) {
-    mySwitch.send(5393, 24);
+    if (nextSignal == 0) mySwitch.send(5393, 24);
+    if (nextSignal == 1) mySwitch.send(5396, 24);
+    if (nextSignal == 2) mySwitch.send(5390, 24);
+    
+    nextSignal++;
+    if (nextSignal > 2) nextSignal = 0;
     
     digitalWrite(ledPin, HIGH); 
     delay(100);
