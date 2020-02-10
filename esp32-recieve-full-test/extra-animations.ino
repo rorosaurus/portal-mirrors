@@ -109,7 +109,7 @@ CRGBPalette16 pacifica_palette_3 =
       0x000E39, 0x001040, 0x001450, 0x001860, 0x001C70, 0x002080, 0x1040BF, 0x2060FF };
 
 
-void pacifica_loop()
+void pacifica()
 {
   // Increment the four "color index start" counters, one for each wave layer.
   // Each is incremented at a different speed, and the speeds vary over time.
